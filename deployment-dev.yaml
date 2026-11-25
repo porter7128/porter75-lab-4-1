@@ -51,11 +51,16 @@ spec:
             - containerPort: 5000
           volumeMounts:
             - name: nfs-storage
-              mountPath: /nfs       
+              mountPath: /nfs    
+            - name: data
+              mountPath: /data   
       volumes:
         - name: nfs-storage
           persistentVolumeClaim:
-            claimName: flask-pvc    
+            claimName: flask-pvc
+        - name: data
+          persistentVolumeClaim:
+            claimName: student-storage  
 ---
 apiVersion: v1
 kind: Service
@@ -70,16 +75,3 @@ spec:
     targetPort: 5000
   selector:
     app: flask
----
-spec:
-  template:
-    spec:
-      containers:
-        - name: your-container
-          volumeMounts:
-            - name: data
-              mountPath: /data
-      volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: student-storage
